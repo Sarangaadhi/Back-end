@@ -1,5 +1,6 @@
 <?php
-
-    echo("sensitive data");
-
+function handleRequest($requestObject,$function){
+    $result=$function($requestObject);
+    showResponse($result);
+}
 ?>
