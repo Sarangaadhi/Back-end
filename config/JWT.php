@@ -8,4 +8,5 @@ class config_JWT{
     static $jwt_not_before=0;
     static $jwt_expire_after=60*60;
 }
+
 ?>

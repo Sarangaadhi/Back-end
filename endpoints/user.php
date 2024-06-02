@@ -1,10 +1,8 @@
 <?php
-
     include_once 'config/JWT.php';
     
     use \Firebase\JWT\JWT;
     use \Firebase\JWT\Key;
-
 
     function UserCreate($requestObject){
         //database operation.
@@ -19,17 +17,12 @@
         return $result;
     }
 
-
     function UserLogin($requestObject){
 
-        $id = 123;
-
-
-        
+        $id = 123;       
 
         //database operation.
-        
-        
+                
         
         $issuer_claim = config_JWT::$jwt_issuer;
         $audience_claim = config_JWT::$jwt_audience;
@@ -63,8 +56,31 @@
         return $result;
     }
 
-   
+    function UserReadAll($requestObject){
 
+        $ObjResponse['http_code'] = http_response_code(200);
+        $ObjResponse['data'] = "dummy data here";
+
+        $result = [
+            'http_code' => $ObjResponse['http_code'],
+            'data' => json_encode($ObjResponse['data'])
+        ];
+
+        return $result;
+    }
+
+    function UserReadById($requestObject, $params){
+        
+        $ObjResponse['http_code'] = http_response_code(200);
+        $ObjResponse['data'] = "dummy data here: id=" . $params['id'];
+
+        $result = [
+            'http_code' => $ObjResponse['http_code'],
+            'data' => json_encode($ObjResponse['data'])
+        ];
+
+        return $result;
+    }
 
 
 
