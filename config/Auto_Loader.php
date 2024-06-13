@@ -6,5 +6,5 @@
     include_once 'http/response.php';
     include_once 'endpoints/user.php';
 
-
+    include_once 'object_models/User.php';
 ?>

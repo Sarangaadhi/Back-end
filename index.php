@@ -15,12 +15,28 @@
         $response['data'] = "Unprocessable";
         showResponse($response);
     }
-      
-    
-
-
     
     $uri = explode("/", $ObjRequest['endpoint']);
+
+
+    //Authorization
+    $authorized = false;
+    if(isset($uri[1]) && $uri[1]==="login"){
+        $authorized = true;
+    }else{
+        $request_data = json_decode(file_get_contents('php://input'));
+        $ObjRequest['token'] = $request_data->token;
+        $authorized = User_authorize($ObjRequest['token']);
+    }
+
+    if (!$authorized) {
+        $response = [
+            'http_code' => 401,
+            'data' => json_encode(['message' => 'Not Authorized']),
+        ];
+        showResponse($response);
+    }
+
 
     switch ($uri[1]) {
         case 'register':
@@ -44,15 +60,15 @@
                     break;
                 
                 case 'POST':
-                    echo("GET request");
+                    echo("POST request");
                     break;
 
                 case 'PUT':
-                    echo("GET request");
+                    echo("PUT request");
                     break;
 
                 case 'DELETE':
-                    echo("GET request");
+                    echo("DELETE request");
                     break;
                     
                 default:
@@ -60,6 +76,7 @@
                     break;
             }
             break;   
+        
         default:
             $response['http_code'] = 503;
             $response['data'] = "Request can not be processed";
