@@ -9,6 +9,13 @@
         private $password = '';
         private $conn;
 
+        //DB Params [remote]
+        // private $host = 'localhost';
+        // private $db_name = 'super3_backend';
+        // private $username = 'root';
+        // private $password = '';
+        // private $conn;
+
         //DB Connect
         public function connect(){
             $this->conn = null;

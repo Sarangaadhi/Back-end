@@ -9,15 +9,10 @@
         'requestBody' => json_decode(file_get_contents('php://input')),
         'token' => ""
     ];
-
     if($ObjRequest['accept'] != "application/json"){
-        $response['http_code'] = 400;
-        $response['data'] = "Unprocessable";
-        showResponse($response);
-    }
-    
+        showResponseErr(422);
+    }    
     $uri = explode("/", $ObjRequest['endpoint']);
-
 
     //Authorization
     $authorized = false;
@@ -30,13 +25,8 @@
     }
 
     if (!$authorized) {
-        $response = [
-            'http_code' => 401,
-            'data' => json_encode(['message' => 'Not Authorized']),
-        ];
-        showResponse($response);
+        showResponseErr(401);
     }
-
 
     switch ($uri[1]) {
         case 'register':
@@ -60,27 +50,39 @@
                     break;
                 
                 case 'POST':
-                    echo("POST request");
+                    handleRequest($ObjRequest['requestBody'],'UserCreate');
                     break;
 
                 case 'PUT':
-                    echo("PUT request");
+                    if(isset($uri[2]) && is_numeric($uri[2])){
+                        $params = [
+                            "id" => $uri[2]
+                        ];
+                        handleRequest($ObjRequest['requestBody'],'UserUpdate',$params);
+                    }else{
+                        showResponseErr(400);
+                    }
                     break;
 
                 case 'DELETE':
-                    echo("DELETE request");
+                    if(isset($uri[2]) && is_numeric($uri[2])){
+                        $params = [
+                            "id" => $uri[2]
+                        ];
+                        handleRequest($ObjRequest['requestBody'],'UserDelete',$params);
+                    }else{
+                        showResponseErr(400);
+                    }
                     break;
                     
                 default:
-                    echo("INVALID request");
+                    showResponseErr(400);
                     break;
             }
             break;   
         
         default:
-            $response['http_code'] = 503;
-            $response['data'] = "Request can not be processed";
-            showResponse($response);
+            showResponseErr(503);
             break;
     }
 
