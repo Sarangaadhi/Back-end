@@ -15,15 +15,16 @@
 
             //SQL query to select users
             $query = "INSERT INTO `user` 
-            (`username`, `password`, `is_manager`, `is_admin`, `created_at`) VALUES
-            (:username, :password, :is_manager, :is_admin, current_timestamp()";
+            (`employee_id`, `username`, `password`, `is_manager`, `is_admin`, `created_at`) VALUES
+            (:employee_id, :username, :password, :is_manager, :is_admin, current_timestamp())";
 
             // Query parameters
             $params = [
+                'employee_id' => $requestObject->data->employee_id,
                 'username' => $requestObject->data->username,
                 'password' => $requestObject->data->password,
-                'is_manager' => $requestObject->data->isManager,
-                'is_admin' => $requestObject->data->isAdmin,
+                'is_manager' => $requestObject->data->is_manager,
+                'is_admin' => $requestObject->data->is_admin,
             ];
 
             //Query result
@@ -51,7 +52,7 @@
         $db = new Database();
 
         //SQL query to select users
-        $query = "SELECT `id`, `username`, `password`, `is_manager`, `is_admin`, `is_active`, `is_deleted` FROM user WHERE `is_active`= :is_active AND `username`= :username";
+        $query = "SELECT `id`, `employee_id`, `username`, `password`, `is_manager`, `is_admin`, `is_active`, `is_deleted` FROM user WHERE `is_active`= :is_active AND `username`= :username";
 
         // Query parameters
         $params = [
@@ -78,10 +79,11 @@
                 "exp" => $expire_claim,
                 "data" => array(
                     "id" => $db_result[0]['id'],
+                    "employeeId" => $db_result[0]['employee_id'],
                     "username" => $db_result[0]['username'],
-                    "is_admin" => $db_result[0]['is_admin'],
-                    "is_manager" => $db_result[0]['is_manager'],
-                    "is_active" => $db_result[0]['is_active']
+                    "isAdmin" => $db_result[0]['is_admin'],
+                    "isManager" => $db_result[0]['is_manager'],
+                    "isActive" => $db_result[0]['is_active']
                 )
             );
     
@@ -124,7 +126,7 @@
             $db = new Database();
 
             //SQL query to select users
-            $query = "SELECT `id`, `username`, `password`, `is_manager`, `is_admin`, `is_active`, `is_deleted` FROM user WHERE `is_active`= :is_active AND `is_deleted`= :is_deleted";
+            $query = "SELECT `id`, `employee_id`, `username`, `password`, `is_manager`, `is_admin`, `is_active`, `is_deleted` FROM user WHERE `is_active`= :is_active AND `is_deleted`= :is_deleted";
 
             // Query parameters
             $params = [
@@ -142,6 +144,7 @@
                 for ($i=0; $i < count($db_result) ; $i++) { 
                     $obj = new User(
                         $db_result[$i]['id'],
+                        $db_result[$i]['employee_id'],
                         $db_result[$i]['username'],
                         $db_result[$i]['password'],
                         $db_result[$i]['is_manager'],
@@ -178,7 +181,7 @@
             $db = new Database();
 
             //SQL query to select users
-            $query = "SELECT `id`, `username`, `password`, `is_manager`, `is_admin`, `is_active`, `is_deleted` FROM user WHERE `id`= :id AND `is_deleted`= :is_deleted";
+            $query = "SELECT `id`, `employee_id`, `username`, `password`, `is_manager`, `is_admin`, `is_active`, `is_deleted` FROM user WHERE `id`= :id AND `is_deleted`= :is_deleted";
 
             // Query parameters
             $db_params = [
@@ -196,6 +199,7 @@
                 for ($i=0; $i < count($db_result) ; $i++) { 
                     $obj = new User(
                         $db_result[$i]['id'],
+                        $db_result[$i]['employee_id'],
                         $db_result[$i]['username'],
                         $db_result[$i]['password'],
                         $db_result[$i]['is_manager'],
@@ -231,11 +235,12 @@
             $db = new Database();
 
             //SQL query to select users
-            $query = "UPDATE user SET `username`=:username, `password`=:password, `is_manager`=:is_manager, `is_admin`=:is_admin, `is_active`=:is_active, `is_deleted`=:is_deleted WHERE `id`= :id";
+            $query = "UPDATE user SET `employee_id`=:employee_id, `username`=:username, `password`=:password, `is_manager`=:is_manager, `is_admin`=:is_admin, `is_active`=:is_active, `is_deleted`=:is_deleted WHERE `id`= :id";
 
             // Query parameters
             $db_params = [
                 'id' => $params["id"],
+                'employee_id' => $requestObject->data->employee_id,
                 'username' => $requestObject->data->username,
                 'password' => $requestObject->data->password,
                 'is_manager' => $requestObject->data->is_manager,

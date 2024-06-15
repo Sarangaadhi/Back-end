@@ -18,7 +18,7 @@ CREATE TABLE `employee` (
     `address_line_2` varchar(32) NULL,
     `city` varchar(24) NOT NULL,
     `telephone` varchar(16) NULL,
-    `email` varchar(64) NOT NULL UNIQUE,
+    `email` varchar(64) NOT NULL,
     `designation` varchar(24) NULL,
     `is_active` tinyint(1) NOT NULL DEFAULT 1,
     `is_deleted` tinyint(1) NOT NULL DEFAULT 0,

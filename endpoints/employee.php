@@ -12,7 +12,7 @@
             //SQL query to insert entity
             $query = "INSERT INTO `employee` 
             (`nic_number`, `first_name`, `last_name`, `address_line_1`, `address_line_2`, `city`, `telephone`, `email`, `designation`, `created_at`) VALUES
-            (:nic_number, :first_name, :last_name, :address_line_1, :address_line_2, :city, :telephone, :email, :designation, current_timestamp()";
+            (:nic_number, :first_name, :last_name, :address_line_1, :address_line_2, :city, :telephone, :email, :designation, current_timestamp())";
 
             // Query parameters
             $params = [
@@ -29,7 +29,7 @@
 
             //Query result
             $db_result = $db->query($query,$params);
-            
+
             $requestObject->data->id = $db_result;
 
             $response = [
@@ -83,7 +83,6 @@
 
             //Query result
             $db_result = $db->query($query,$params);
-
             //inititalize reults array
             $results = [];
 
@@ -103,6 +102,7 @@
                         $db_result[$i]['is_active'],
                         $db_result[$i]['is_deleted']
                     );
+                    // print_r($obj);
                     //Pushing objects to results array
                     array_push($results,$obj->make_json());
                 }

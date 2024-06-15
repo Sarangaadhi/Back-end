@@ -12,7 +12,7 @@
             //SQL query to insert entity
             $query = "INSERT INTO `driver` 
             (`employee_id`, `created_at`) VALUES
-            (:employee_id, current_timestamp()";
+            (:employee_id, current_timestamp())";
 
             // Query parameters
             $params = [

@@ -15,18 +15,24 @@
         private bool $is_deleted;
 
         public function __construct($id, $nic_number, $first_name, $last_name, $address_line_1, $address_line_2, $city, $telephone, $email, $designation, $is_active, $is_deleted){
-            $this->id = $id;
-            $this->nic_number = $nic_number;
-            $this->first_name = $first_name;
-            $this->last_name = $last_name;
-            $this->address_line_1 = $address_line_1;
-            $this->address_line_2 = $address_line_2;
-            $this->city = $city;
-            $this->telephone = $telephone;
-            $this->email = $email;
-            $this->designation = $designation;
-            $this->is_active = $is_active;
-            $this->is_deleted = $is_deleted;
+            // try {
+                $this->id = $id;
+                $this->nic_number = is_null($nic_number) ? "" : $nic_number;
+                $this->first_name = is_null($first_name) ? "" : $first_name;
+                $this->last_name = is_null($last_name) ? "" : $last_name;
+                $this->address_line_1 = is_null($address_line_1) ? "" : $address_line_1;
+                $this->address_line_2 = is_null($address_line_2) ? "" : $address_line_2;
+                $this->city = is_null($city) ? "" : $city;
+                $this->telephone = is_null($telephone) ? "" : $telephone;
+                $this->email = is_null($email) ? "" : $email;
+                $this->designation = is_null($designation) ? "" : $designation;
+                $this->is_active = $is_active;
+                $this->is_deleted = $is_deleted;
+            // } catch (Exception $ex) {
+            //     print_r("Exception: " . $ex);
+            // }finally{
+            //     //print_r($this);
+            // }
         }
 
         //Return JSON value

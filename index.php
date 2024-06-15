@@ -81,6 +81,54 @@
             }
             break;   
         
+        case'employee':
+            switch ($ObjRequest['requestMethod']) {
+                case 'GET':
+                    if(isset($uri[2]) && is_numeric($uri[2])){
+                        $params = [
+                            "id" => $uri[2]
+                        ];
+                        handleRequest($ObjRequest['requestBody'],'EmployeeReadById',$params);
+                    }else{
+                        handleRequest($ObjRequest['requestBody'],'EmployeeReadAll');
+                    }
+                    break;
+                
+                case 'POST':
+                    handleRequest($ObjRequest['requestBody'],'EmployeeCreate');
+                    break;
+
+                case 'PUT':
+                    if(isset($uri[2]) && is_numeric($uri[2])){
+                        $params = [
+                            "id" => $uri[2]
+                        ];
+                        handleRequest($ObjRequest['requestBody'],'EmployeeUpdate',$params);
+                    }else{
+                        showResponseErr(400);
+                    }
+                    break;
+
+                case 'DELETE':
+                    if(isset($uri[2]) && is_numeric($uri[2])){
+                        $params = [
+                            "id" => $uri[2]
+                        ];
+                        handleRequest($ObjRequest['requestBody'],'EmployeeDelete',$params);
+                    }else{
+                        showResponseErr(400);
+                    }
+                    break;
+                    
+                default:
+                    showResponseErr(400);
+                    break;
+            }
+            break; 
+        
+        
+        
+       
         default:
             showResponseErr(503);
             break;

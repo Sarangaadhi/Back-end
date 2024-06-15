@@ -12,7 +12,7 @@
             //SQL query to insert entity
             $query = "INSERT INTO `trip` 
             (`vehicle_id`, `route_id`, `trip_number`, `fuel_consumed`, `distance_traveled`, `cash_collected`, `is_final`, `created_at`) VALUES
-            (:vehicle_id, :route_id, :trip_number, :fuel_consumed, :distance_traveled, :cash_collected, :is_final, current_timestamp()";
+            (:vehicle_id, :route_id, :trip_number, :fuel_consumed, :distance_traveled, :cash_collected, :is_final, current_timestamp())";
 
             // Query parameters
             $params = [

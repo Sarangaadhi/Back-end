@@ -12,7 +12,7 @@
             //SQL query to insert entity
             $query = "INSERT INTO `vehicle` 
             (`make`, `model`, `manufactured_year`, `number_of_seats`, `registration_number`, `created_at`) VALUES
-            (:make, :model, :manufactured_year, :number_of_seats, :registration_number, current_timestamp()";
+            (:make, :model, :manufactured_year, :number_of_seats, :registration_number, current_timestamp())";
 
             // Query parameters
             $params = [

@@ -12,7 +12,7 @@
             //SQL query to insert entity
             $query = "INSERT INTO `trip_expenses` 
             (`trip_id`, `description`, `amount`, `created_at`) VALUES
-            (:trip_id, :description, :amount, current_timestamp()";
+            (:trip_id, :description, :amount, current_timestamp())";
 
             // Query parameters
             $params = [
