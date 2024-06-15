@@ -1,10 +1,6 @@
 <?php
-    include_once 'config/JWT.php';
     
-    use \Firebase\JWT\JWT;
-    use \Firebase\JWT\Key;
-
-    function UserCreate($requestObject){
+    function EmployeeCreate($requestObject){
         $response = [
             'http_code' => http_response_code(200),
             'data' => null
@@ -14,16 +10,21 @@
             $db = new Database();
 
             //SQL query to select users
-            $query = "INSERT INTO `user` 
-            (`username`, `password`, `is_manager`, `is_admin`, `created_at`) VALUES
-            (:username, :password, :is_manager, :is_admin, current_timestamp()";
+            $query = "INSERT INTO `employee` 
+            (`nic_number`, `first_name`, `last_name`, `address_line_1`, `address_line_2`, `city`, `telephone`, `email`, `designation`, `created_at`) VALUES
+            (:nic_number, :first_name, :last_name, :address_line_1, :address_line_2, :city, :telephone, :email, :designation, current_timestamp()";
 
             // Query parameters
             $params = [
-                'username' => $requestObject->data->username,
-                'password' => $requestObject->data->password,
-                'is_manager' => $requestObject->data->isManager,
-                'is_admin' => $requestObject->data->isAdmin,
+                'nic_number' => $requestObject->data->nicNumber,
+                'first_name' => $requestObject->data->firstName,
+                'last_name' => $requestObject->data->lastName,
+                'address_line_1' => $requestObject->data->addressLine1,
+                'address_line_2' => $requestObject->data->addressLine2,
+                'city' => $requestObject->data->city,
+                'telephone' => $requestObject->data->telephone,
+                'email' => $requestObject->data->email,
+                'designation' => $requestObject->data->designation
             ];
 
             //Query result
@@ -45,75 +46,8 @@
             return $response;    
         }        
     }
-
-    function UserLogin($requestObject){
-        //Instantitate Database Class
-        $db = new Database();
-
-        //SQL query to select users
-        $query = "SELECT `id`, `username`, `password`, `is_manager`, `is_admin`, `is_active`, `is_deleted` FROM user WHERE `is_active`= :is_active AND `username`= :username";
-
-        // Query parameters
-        $params = [
-            'username' => $requestObject->data->username,
-            'is_active' => '1',            
-        ];
-
-        //Query result
-        $db_result = $db->query($query,$params);
-          
-        if(count($db_result) > 0){
-            $db_result[0]['password'] == $requestObject->data->password;
-
-            $issuer_claim = config_JWT::$jwt_issuer;
-            $audience_claim = config_JWT::$jwt_audience;
-            $issuedat_claim = time(); // issued at
-            $notbefore_claim = $issuedat_claim + config_JWT::$jwt_not_before;
-            $expire_claim = $issuedat_claim + config_JWT::$jwt_expire_after;
-            $token = array(
-                "iss" => $issuer_claim,
-                "aud" => $audience_claim,
-                "iat" => $issuedat_claim,
-                "nbf" => $notbefore_claim,
-                "exp" => $expire_claim,
-                "data" => array(
-                    "id" => $db_result[0]['id'],
-                    "username" => $db_result[0]['username'],
-                    "is_admin" => $db_result[0]['is_admin'],
-                    "is_manager" => $db_result[0]['is_manager'],
-                    "is_active" => $db_result[0]['is_active']
-                )
-            );
-    
-            $ObjResponse['http_code'] = http_response_code(200);
-            $ObjResponse['data']['status'] = "success";
-            $ObjResponse['data']['message'] = "Successful login.";
-            $ObjResponse['data']['token'] = JWT::encode($token, config_JWT::$jwt_secret_key, config_JWT::$jwt_algorithm);
-            $ObjResponse['data']['expireAt'] = $expire_claim;
-                   
-            return [
-                'http_code' => $ObjResponse['http_code'],
-                'data' => json_encode($ObjResponse['data'])
-            ];
-        }
-        
-        showResponseErr(401);
-    }
-
-    function User_authorize($jwt){
-        if($jwt){
-            try {
-                JWT::decode($jwt, new Key(Config_JWT::$jwt_secret_key, Config_JWT::$jwt_algorithm));
-                return true;
-            } catch (Exception $e){
-                return false;
-            }
-        }else{
-            return false;
-        }
-    }
-
-    function UserReadAll($requestObject){
+ 
+    function EmployeeReadAll($requestObject){
         $response = [
             'http_code' => http_response_code(200),
             'data' => null
@@ -124,7 +58,7 @@
             $db = new Database();
 
             //SQL query to select users
-            $query = "SELECT `id`, `username`, `password`, `is_manager`, `is_admin`, `is_active`, `is_deleted` FROM user WHERE `is_active`= :is_active AND `is_deleted`= :is_deleted";
+            $query = "SELECT `id`, `nic_number`, `first_name`, `last_name`, `address_line_1`, `address_line_2`, `city`, `telephone`, `email`, `designation`, `is_active`, `is_deleted` FROM employee WHERE `is_active`= :is_active AND `is_deleted`= :is_deleted";
 
             // Query parameters
             $params = [
@@ -140,7 +74,7 @@
 
             if(count($db_result) > 0){
                 for ($i=0; $i < count($db_result) ; $i++) { 
-                    $user = new User(
+                    $user = new Employee(
                         $db_result[$i]['id'],
                         $db_result[$i]['username'],
                         $db_result[$i]['password'],
@@ -168,7 +102,7 @@
         }
     }
 
-    function UserReadById($requestObject, $params){
+    function EmployeeReadById($requestObject, $params){
         $response = [
             'http_code' => http_response_code(200),
             'data' => null
@@ -221,7 +155,7 @@
         }
     }
 
-    function UserUpdate($requestObject, $params){
+    function EmployeeUpdate($requestObject, $params){
         $response = [
             'http_code' => http_response_code(200),
             'data' => null
@@ -264,7 +198,7 @@
         }
     }
     
-    function UserDelete($requestObject, $params){
+    function EmployeeDelete($requestObject, $params){
         $response = [
             'http_code' => http_response_code(200),
             'data' => null
