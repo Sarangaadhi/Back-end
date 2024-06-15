@@ -9,18 +9,18 @@
             //Instantitate Database Class
             $db = new Database();
 
-            //SQL query to select users
+            //SQL query to insert entity
             $query = "INSERT INTO `employee` 
             (`nic_number`, `first_name`, `last_name`, `address_line_1`, `address_line_2`, `city`, `telephone`, `email`, `designation`, `created_at`) VALUES
             (:nic_number, :first_name, :last_name, :address_line_1, :address_line_2, :city, :telephone, :email, :designation, current_timestamp()";
 
             // Query parameters
             $params = [
-                'nic_number' => $requestObject->data->nicNumber,
-                'first_name' => $requestObject->data->firstName,
-                'last_name' => $requestObject->data->lastName,
-                'address_line_1' => $requestObject->data->addressLine1,
-                'address_line_2' => $requestObject->data->addressLine2,
+                'nic_number' => $requestObject->data->nic_number,
+                'first_name' => $requestObject->data->first_name,
+                'last_name' => $requestObject->data->last_name,
+                'address_line_1' => $requestObject->data->address_line_1,
+                'address_line_2' => $requestObject->data->address_line_2,
                 'city' => $requestObject->data->city,
                 'telephone' => $requestObject->data->telephone,
                 'email' => $requestObject->data->email,
@@ -57,8 +57,23 @@
             //Instantitate Database Class
             $db = new Database();
 
-            //SQL query to select users
-            $query = "SELECT `id`, `nic_number`, `first_name`, `last_name`, `address_line_1`, `address_line_2`, `city`, `telephone`, `email`, `designation`, `is_active`, `is_deleted` FROM employee WHERE `is_active`= :is_active AND `is_deleted`= :is_deleted";
+            $query = "SELECT 
+                    `id`,
+                    `nic_number`,
+                    `first_name`,
+                    `last_name`,
+                    `address_line_1`,
+                    `address_line_2`,
+                    `city`,
+                    `telephone`,
+                    `email`,
+                    `designation`,
+                    `is_active`,
+                    `is_deleted` 
+                FROM employee 
+                WHERE
+                    `is_active`= :is_active AND
+                    `is_deleted`= :is_deleted";
 
             // Query parameters
             $params = [
@@ -74,17 +89,22 @@
 
             if(count($db_result) > 0){
                 for ($i=0; $i < count($db_result) ; $i++) { 
-                    $user = new Employee(
+                    $obj = new Employee(
                         $db_result[$i]['id'],
-                        $db_result[$i]['username'],
-                        $db_result[$i]['password'],
-                        $db_result[$i]['is_manager'],
-                        $db_result[$i]['is_admin'],
+                        $db_result[$i]['nic_number'],
+                        $db_result[$i]['first_name'],
+                        $db_result[$i]['last_name'],
+                        $db_result[$i]['address_line_1'],
+                        $db_result[$i]['address_line_2'],
+                        $db_result[$i]['city'],
+                        $db_result[$i]['telephone'],
+                        $db_result[$i]['email'],
+                        $db_result[$i]['designation'],
                         $db_result[$i]['is_active'],
                         $db_result[$i]['is_deleted']
                     );
                     //Pushing objects to results array
-                    array_push($results,$user->make_json());
+                    array_push($results,$obj->make_json());
                 }
             }
 
@@ -111,8 +131,24 @@
             //Instantitate Database Class
             $db = new Database();
 
-            //SQL query to select users
-            $query = "SELECT `id`, `username`, `password`, `is_manager`, `is_admin`, `is_active`, `is_deleted` FROM user WHERE `id`= :id AND `is_deleted`= :is_deleted";
+            //SQL query to select entity
+            $query = "SELECT 
+                    `id`,
+                    `nic_number`,
+                    `first_name`,
+                    `last_name`,
+                    `address_line_1`,
+                    `address_line_2`,
+                    `city`,
+                    `telephone`,
+                    `email`,
+                    `designation`,
+                    `is_active`,
+                    `is_deleted` 
+                FROM employee 
+                WHERE
+                    `id`= :id AND
+                    `is_deleted`= :is_deleted";
 
             // Query parameters
             $db_params = [
@@ -128,17 +164,22 @@
 
             if(count($db_result) > 0){
                 for ($i=0; $i < count($db_result) ; $i++) { 
-                    $user = new User(
+                    $obj = new Employee(
                         $db_result[$i]['id'],
-                        $db_result[$i]['username'],
-                        $db_result[$i]['password'],
-                        $db_result[$i]['is_manager'],
-                        $db_result[$i]['is_admin'],
+                        $db_result[$i]['nic_number'],
+                        $db_result[$i]['first_name'],
+                        $db_result[$i]['last_name'],
+                        $db_result[$i]['address_line_1'],
+                        $db_result[$i]['address_line_2'],
+                        $db_result[$i]['city'],
+                        $db_result[$i]['telephone'],
+                        $db_result[$i]['email'],
+                        $db_result[$i]['designation'],
                         $db_result[$i]['is_active'],
                         $db_result[$i]['is_deleted']
                     );
                     //Pushing objects to results array
-                    array_push($results,$user->make_json());
+                    array_push($results,$obj->make_json());
                 }
             }
             $response = [
@@ -164,16 +205,33 @@
             //Instantitate Database Class
             $db = new Database();
 
-            //SQL query to select users
-            $query = "UPDATE user SET `username`=:username, `password`=:password, `is_manager`=:is_manager, `is_admin`=:is_admin, `is_active`=:is_active, `is_deleted`=:is_deleted WHERE `id`= :id";
+            //SQL query to update entity
+            $query = "UPDATE employee SET
+                    `nic_number`= :nic_number,
+                    `first_name`= :first_name,
+                    `last_name`= :last_name,
+                    `address_line_1`= :address_line_1,
+                    `address_line_2`= :address_line_2,
+                    `city`= :city,
+                    `telephone`= :telephone,
+                    `email`= :email,
+                    `designation`= :designation,
+                    `is_active`=:is_active,
+                    `is_deleted`=:is_deleted 
+                WHERE `id`= :id";
 
             // Query parameters
             $db_params = [
                 'id' => $params["id"],
-                'username' => $requestObject->data->username,
-                'password' => $requestObject->data->password,
-                'is_manager' => $requestObject->data->is_manager,
-                'is_admin' => $requestObject->data->is_admin,
+                'nic_number' => $requestObject->data->nic_number,
+                'first_name' => $requestObject->data->first_name,
+                'last_name' => $requestObject->data->last_name,
+                'address_line_1' => $requestObject->data->address_line_1,
+                'address_line_2' => $requestObject->data->address_line_2,
+                'city' => $requestObject->data->city,
+                'telephone' => $requestObject->data->telephone,
+                'email' => $requestObject->data->email,
+                'designation' => $requestObject->data->designation,
                 'is_active' => $requestObject->data->is_active,
                 'is_deleted' => '0',
             ];
@@ -207,8 +265,8 @@
             //Instantitate Database Class
             $db = new Database();
 
-            //SQL query to select users
-            $query = "UPDATE user SET `is_deleted`= 1 WHERE `id`= :id";
+            //SQL query to delete entity
+            $query = "UPDATE employee SET `is_deleted`= 1 WHERE `id`= :id";
 
             // Query parameters
             $db_params = [

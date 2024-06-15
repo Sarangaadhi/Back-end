@@ -1,10 +1,6 @@
 <?php
-    include_once 'config/JWT.php';
     
-    use \Firebase\JWT\JWT;
-    use \Firebase\JWT\Key;
-
-    function UserCreate($requestObject){
+    function RouteTypeCreate($requestObject){
         $response = [
             'http_code' => http_response_code(200),
             'data' => null
@@ -13,17 +9,14 @@
             //Instantitate Database Class
             $db = new Database();
 
-            //SQL query to select users
-            $query = "INSERT INTO `user` 
-            (`username`, `password`, `is_manager`, `is_admin`, `created_at`) VALUES
-            (:username, :password, :is_manager, :is_admin, current_timestamp()";
+            //SQL query to insert entity
+            $query = "INSERT INTO `route_type` 
+            (`route_type_name`, `created_at`) VALUES
+            (:route_type_name, current_timestamp()";
 
             // Query parameters
             $params = [
-                'username' => $requestObject->data->username,
-                'password' => $requestObject->data->password,
-                'is_manager' => $requestObject->data->isManager,
-                'is_admin' => $requestObject->data->isAdmin,
+                'route_type_name' => $requestObject->data->route_type_name
             ];
 
             //Query result
@@ -45,75 +38,8 @@
             return $response;    
         }        
     }
-
-    function UserLogin($requestObject){
-        //Instantitate Database Class
-        $db = new Database();
-
-        //SQL query to select users
-        $query = "SELECT `id`, `username`, `password`, `is_manager`, `is_admin`, `is_active`, `is_deleted` FROM user WHERE `is_active`= :is_active AND `username`= :username";
-
-        // Query parameters
-        $params = [
-            'username' => $requestObject->data->username,
-            'is_active' => '1',            
-        ];
-
-        //Query result
-        $db_result = $db->query($query,$params);
-          
-        if(count($db_result) > 0){
-            $db_result[0]['password'] == $requestObject->data->password;
-
-            $issuer_claim = config_JWT::$jwt_issuer;
-            $audience_claim = config_JWT::$jwt_audience;
-            $issuedat_claim = time(); // issued at
-            $notbefore_claim = $issuedat_claim + config_JWT::$jwt_not_before;
-            $expire_claim = $issuedat_claim + config_JWT::$jwt_expire_after;
-            $token = array(
-                "iss" => $issuer_claim,
-                "aud" => $audience_claim,
-                "iat" => $issuedat_claim,
-                "nbf" => $notbefore_claim,
-                "exp" => $expire_claim,
-                "data" => array(
-                    "id" => $db_result[0]['id'],
-                    "username" => $db_result[0]['username'],
-                    "is_admin" => $db_result[0]['is_admin'],
-                    "is_manager" => $db_result[0]['is_manager'],
-                    "is_active" => $db_result[0]['is_active']
-                )
-            );
-    
-            $ObjResponse['http_code'] = http_response_code(200);
-            $ObjResponse['data']['status'] = "success";
-            $ObjResponse['data']['message'] = "Successful login.";
-            $ObjResponse['data']['token'] = JWT::encode($token, config_JWT::$jwt_secret_key, config_JWT::$jwt_algorithm);
-            $ObjResponse['data']['expireAt'] = $expire_claim;
-                   
-            return [
-                'http_code' => $ObjResponse['http_code'],
-                'data' => json_encode($ObjResponse['data'])
-            ];
-        }
-        
-        showResponseErr(401);
-    }
-
-    function User_authorize($jwt){
-        if($jwt){
-            try {
-                JWT::decode($jwt, new Key(Config_JWT::$jwt_secret_key, Config_JWT::$jwt_algorithm));
-                return true;
-            } catch (Exception $e){
-                return false;
-            }
-        }else{
-            return false;
-        }
-    }
-
-    function UserReadAll($requestObject){
+ 
+    function RouteTypeReadAll($requestObject){
         $response = [
             'http_code' => http_response_code(200),
             'data' => null
@@ -123,8 +49,15 @@
             //Instantitate Database Class
             $db = new Database();
 
-            //SQL query to select users
-            $query = "SELECT `id`, `username`, `password`, `is_manager`, `is_admin`, `is_active`, `is_deleted` FROM user WHERE `is_active`= :is_active AND `is_deleted`= :is_deleted";
+            $query = "SELECT 
+                    `id`,
+                    `route_type_name`,
+                    `is_active`,
+                    `is_deleted` 
+                FROM route_type 
+                WHERE
+                    `is_active`= :is_active AND
+                    `is_deleted`= :is_deleted";
 
             // Query parameters
             $params = [
@@ -140,12 +73,9 @@
 
             if(count($db_result) > 0){
                 for ($i=0; $i < count($db_result) ; $i++) { 
-                    $obj = new User(
+                    $obj = new RouteType(
                         $db_result[$i]['id'],
-                        $db_result[$i]['username'],
-                        $db_result[$i]['password'],
-                        $db_result[$i]['is_manager'],
-                        $db_result[$i]['is_admin'],
+                        $db_result[$i]['route_type_name'],
                         $db_result[$i]['is_active'],
                         $db_result[$i]['is_deleted']
                     );
@@ -168,7 +98,7 @@
         }
     }
 
-    function UserReadById($requestObject, $params){
+    function RouteTypeReadById($requestObject, $params){
         $response = [
             'http_code' => http_response_code(200),
             'data' => null
@@ -177,8 +107,16 @@
             //Instantitate Database Class
             $db = new Database();
 
-            //SQL query to select users
-            $query = "SELECT `id`, `username`, `password`, `is_manager`, `is_admin`, `is_active`, `is_deleted` FROM user WHERE `id`= :id AND `is_deleted`= :is_deleted";
+            //SQL query to select entity
+            $query = "SELECT 
+                    `id`,
+                    `route_type_name`,
+                    `is_active`,
+                    `is_deleted` 
+                FROM route_type 
+                WHERE
+                    `id`= :id AND
+                    `is_deleted`= :is_deleted";
 
             // Query parameters
             $db_params = [
@@ -194,12 +132,9 @@
 
             if(count($db_result) > 0){
                 for ($i=0; $i < count($db_result) ; $i++) { 
-                    $obj = new User(
+                    $obj = new RouteType(
                         $db_result[$i]['id'],
-                        $db_result[$i]['username'],
-                        $db_result[$i]['password'],
-                        $db_result[$i]['is_manager'],
-                        $db_result[$i]['is_admin'],
+                        $db_result[$i]['route_type_name'],
                         $db_result[$i]['is_active'],
                         $db_result[$i]['is_deleted']
                     );
@@ -221,7 +156,7 @@
         }
     }
 
-    function UserUpdate($requestObject, $params){
+    function RouteTypeUpdate($requestObject, $params){
         $response = [
             'http_code' => http_response_code(200),
             'data' => null
@@ -230,16 +165,17 @@
             //Instantitate Database Class
             $db = new Database();
 
-            //SQL query to select users
-            $query = "UPDATE user SET `username`=:username, `password`=:password, `is_manager`=:is_manager, `is_admin`=:is_admin, `is_active`=:is_active, `is_deleted`=:is_deleted WHERE `id`= :id";
+            //SQL query to update entity
+            $query = "UPDATE route_type SET
+                    `route_type_name`= :route_type_name,
+                    `is_active`=:is_active,
+                    `is_deleted`=:is_deleted 
+                WHERE `id`= :id";
 
             // Query parameters
             $db_params = [
                 'id' => $params["id"],
-                'username' => $requestObject->data->username,
-                'password' => $requestObject->data->password,
-                'is_manager' => $requestObject->data->is_manager,
-                'is_admin' => $requestObject->data->is_admin,
+                'route_type_name' => $requestObject->data->route_type_name,
                 'is_active' => $requestObject->data->is_active,
                 'is_deleted' => '0',
             ];
@@ -264,7 +200,7 @@
         }
     }
     
-    function UserDelete($requestObject, $params){
+    function RouteTypeDelete($requestObject, $params){
         $response = [
             'http_code' => http_response_code(200),
             'data' => null
@@ -273,8 +209,8 @@
             //Instantitate Database Class
             $db = new Database();
 
-            //SQL query to select users
-            $query = "UPDATE user SET `is_deleted`= 1 WHERE `id`= :id";
+            //SQL query to delete entity
+            $query = "UPDATE route_type SET `is_deleted`= 1 WHERE `id`= :id";
 
             // Query parameters
             $db_params = [

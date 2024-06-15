@@ -5,7 +5,7 @@
         die();
     }
 
-    function showResponseErr($err){
+    function showResponseErr($err, $msg = ""){
         $err_message = "Unknown Error";
         switch ($err) {
             case 400:
@@ -25,7 +25,10 @@
                 break;
         }
         http_response_code($err);
-        echo(json_encode(['message' => $err_message]));
+        echo(json_encode([
+            'error' => $err_message,
+            'details' => $msg,
+        ]));
         die();
     }
 
