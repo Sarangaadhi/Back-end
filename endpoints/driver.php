@@ -1,6 +1,6 @@
 <?php
     
-    function VehicleCreate($requestObject){
+    function DriverCreate($requestObject){
         $response = [
             'http_code' => http_response_code(200),
             'data' => null
@@ -10,17 +10,13 @@
             $db = new Database();
 
             //SQL query to insert entity
-            $query = "INSERT INTO `vehicle` 
-            (`make`, `model`, `manufactured_year`, `number_of_seats`, `registration_number`, `created_at`) VALUES
-            (:make, :model, :manufactured_year, :number_of_seats, :registration_number, current_timestamp())";
+            $query = "INSERT INTO `driver` 
+            (`employee_id`, `created_at`) VALUES
+            (:employee_id, current_timestamp())";
 
             // Query parameters
             $params = [
-                'make' => $requestObject->data->make,
-                'model' => $requestObject->data->model,
-                'manufactured_year' => $requestObject->data->manufactured_year,
-                'number_of_seats' => $requestObject->data->number_of_seats,
-                'registration_number' => $requestObject->data->registration_number
+                'employee_id' => $requestObject->data->employee_id
             ];
 
             //Query result
@@ -43,7 +39,7 @@
         }        
     }
  
-    function VehicleReadAll($requestObject){
+    function DriverReadAll($requestObject){
         $response = [
             'http_code' => http_response_code(200),
             'data' => null
@@ -55,14 +51,10 @@
 
             $query = "SELECT 
                     `id`,
-                    `make`,
-                    `model`,
-                    `manufactured_year`,
-                    `number_of_seats`,
-                    `registration_number`,
+                    `employee_id`,
                     `is_active`,
                     `is_deleted` 
-                FROM vehicle 
+                FROM driver 
                 WHERE
                     `is_active`= :is_active AND
                     `is_deleted`= :is_deleted";
@@ -81,13 +73,9 @@
 
             if(count($db_result) > 0){
                 for ($i=0; $i < count($db_result) ; $i++) { 
-                    $obj = new Vehicle(
+                    $obj = new Driver(
                         $db_result[$i]['id'],
-                        $db_result[$i]['make'],
-                        $db_result[$i]['model'],
-                        $db_result[$i]['manufactured_year'],
-                        $db_result[$i]['number_of_seats'],
-                        $db_result[$i]['registration_number'],
+                        $db_result[$i]['employee_id'],
                         $db_result[$i]['is_active'],
                         $db_result[$i]['is_deleted']
                     );
@@ -110,7 +98,7 @@
         }
     }
 
-    function VehicleReadById($requestObject, $params){
+    function DriverReadById($requestObject, $params){
         $response = [
             'http_code' => http_response_code(200),
             'data' => null
@@ -122,14 +110,10 @@
             //SQL query to select entity
             $query = "SELECT 
                     `id`,
-                    `make`,
-                    `model`,
-                    `manufactured_year`,
-                    `number_of_seats`,
-                    `registration_number`,
+                    `employee_id`,
                     `is_active`,
                     `is_deleted` 
-                FROM vehicle 
+                FROM driver 
                 WHERE
                     `id`= :id AND
                     `is_deleted`= :is_deleted";
@@ -148,13 +132,9 @@
 
             if(count($db_result) > 0){
                 for ($i=0; $i < count($db_result) ; $i++) { 
-                    $obj = new Vehicle(
+                    $obj = new Driver(
                         $db_result[$i]['id'],
-                        $db_result[$i]['make'],
-                        $db_result[$i]['model'],
-                        $db_result[$i]['manufactured_year'],
-                        $db_result[$i]['number_of_seats'],
-                        $db_result[$i]['registration_number'],
+                        $db_result[$i]['employee_id'],
                         $db_result[$i]['is_active'],
                         $db_result[$i]['is_deleted']
                     );
@@ -176,7 +156,7 @@
         }
     }
 
-    function VehicleUpdate($requestObject, $params){
+    function DriverUpdate($requestObject, $params){
         $response = [
             'http_code' => http_response_code(200),
             'data' => null
@@ -186,12 +166,8 @@
             $db = new Database();
 
             //SQL query to update entity
-            $query = "UPDATE vehicle SET
-                    `make`= :make,
-                    `model`= :model,
-                    `manufactured_year`= :manufactured_year,
-                    `number_of_seats`= :number_of_seats,
-                    `registration_number`= :registration_number,
+            $query = "UPDATE driver SET
+                    `employee_id`= :employee_id,
                     `is_active`=:is_active,
                     `is_deleted`=:is_deleted 
                 WHERE `id`= :id";
@@ -199,11 +175,7 @@
             // Query parameters
             $db_params = [
                 'id' => $params["id"],
-                'make' => $requestObject->data->make,
-                'model' => $requestObject->data->model,
-                'manufactured_year' => $requestObject->data->manufactured_year,
-                'number_of_seats' => $requestObject->data->number_of_seats,
-                'registration_number' => $requestObject->data->registration_number,
+                'employee_id' => $requestObject->data->employee_id,
                 'is_active' => $requestObject->data->is_active,
                 'is_deleted' => '0',
             ];
@@ -228,7 +200,7 @@
         }
     }
     
-    function VehicleDelete($requestObject, $params){
+    function DriverDelete($requestObject, $params){
         $response = [
             'http_code' => http_response_code(200),
             'data' => null
@@ -238,7 +210,7 @@
             $db = new Database();
 
             //SQL query to delete entity
-            $query = "UPDATE vehicle SET `is_deleted`= 1 WHERE `id`= :id";
+            $query = "UPDATE driver SET `is_deleted`= 1 WHERE `id`= :id";
 
             // Query parameters
             $db_params = [

@@ -1,6 +1,6 @@
 <?php
-    class User extends Database{
-        
+    class User{
+
         private int $id;
         private string $username;
         private string $password;
@@ -9,11 +9,7 @@
         private bool $is_active;
         private bool $is_deleted;
 
-        private string $table_name;
-
         public function __construct($id, $username, $password, $is_manager, $is_admin, $is_active, $is_deleted){
-            $this->table_name = "user";
-
             $this->id = $id;
             $this->username = $username;
             $this->password = $password;
@@ -23,14 +19,17 @@
             $this->is_deleted = $is_deleted;
         }
 
-
-        public function read(){
-            $query = "SELECT `id`, `username`, `password`, `is_manager`, `is_admin`, `is_active`, `is_deleted` FROM :table_name WHERE `id`= :id";
-            
-
+        //Return JSON value
+        public function make_json() {
+            return [
+                'id' => $this->id,
+                'username' => $this->username,
+                'is_manager' => $this->is_manager,
+                'is_admin' => $this->is_admin,
+                'is_active' => $this->is_active,
+                'is_deleted' => $this->is_deleted,
+            ];
         }
-
-
 
         //Getters and Setters
 

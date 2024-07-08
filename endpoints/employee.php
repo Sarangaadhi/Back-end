@@ -1,6 +1,6 @@
 <?php
     
-    function VehicleCreate($requestObject){
+    function EmployeeCreate($requestObject){
         $response = [
             'http_code' => http_response_code(200),
             'data' => null
@@ -10,22 +10,26 @@
             $db = new Database();
 
             //SQL query to insert entity
-            $query = "INSERT INTO `vehicle` 
-            (`make`, `model`, `manufactured_year`, `number_of_seats`, `registration_number`, `created_at`) VALUES
-            (:make, :model, :manufactured_year, :number_of_seats, :registration_number, current_timestamp())";
+            $query = "INSERT INTO `employee` 
+            (`nic_number`, `first_name`, `last_name`, `address_line_1`, `address_line_2`, `city`, `telephone`, `email`, `designation`, `created_at`) VALUES
+            (:nic_number, :first_name, :last_name, :address_line_1, :address_line_2, :city, :telephone, :email, :designation, current_timestamp())";
 
             // Query parameters
             $params = [
-                'make' => $requestObject->data->make,
-                'model' => $requestObject->data->model,
-                'manufactured_year' => $requestObject->data->manufactured_year,
-                'number_of_seats' => $requestObject->data->number_of_seats,
-                'registration_number' => $requestObject->data->registration_number
+                'nic_number' => $requestObject->data->nic_number,
+                'first_name' => $requestObject->data->first_name,
+                'last_name' => $requestObject->data->last_name,
+                'address_line_1' => $requestObject->data->address_line_1,
+                'address_line_2' => $requestObject->data->address_line_2,
+                'city' => $requestObject->data->city,
+                'telephone' => $requestObject->data->telephone,
+                'email' => $requestObject->data->email,
+                'designation' => $requestObject->data->designation
             ];
 
             //Query result
             $db_result = $db->query($query,$params);
-            
+
             $requestObject->data->id = $db_result;
 
             $response = [
@@ -43,7 +47,7 @@
         }        
     }
  
-    function VehicleReadAll($requestObject){
+    function EmployeeReadAll($requestObject){
         $response = [
             'http_code' => http_response_code(200),
             'data' => null
@@ -55,14 +59,18 @@
 
             $query = "SELECT 
                     `id`,
-                    `make`,
-                    `model`,
-                    `manufactured_year`,
-                    `number_of_seats`,
-                    `registration_number`,
+                    `nic_number`,
+                    `first_name`,
+                    `last_name`,
+                    `address_line_1`,
+                    `address_line_2`,
+                    `city`,
+                    `telephone`,
+                    `email`,
+                    `designation`,
                     `is_active`,
                     `is_deleted` 
-                FROM vehicle 
+                FROM employee 
                 WHERE
                     `is_active`= :is_active AND
                     `is_deleted`= :is_deleted";
@@ -75,22 +83,26 @@
 
             //Query result
             $db_result = $db->query($query,$params);
-
             //inititalize reults array
             $results = [];
 
             if(count($db_result) > 0){
                 for ($i=0; $i < count($db_result) ; $i++) { 
-                    $obj = new Vehicle(
+                    $obj = new Employee(
                         $db_result[$i]['id'],
-                        $db_result[$i]['make'],
-                        $db_result[$i]['model'],
-                        $db_result[$i]['manufactured_year'],
-                        $db_result[$i]['number_of_seats'],
-                        $db_result[$i]['registration_number'],
+                        $db_result[$i]['nic_number'],
+                        $db_result[$i]['first_name'],
+                        $db_result[$i]['last_name'],
+                        $db_result[$i]['address_line_1'],
+                        $db_result[$i]['address_line_2'],
+                        $db_result[$i]['city'],
+                        $db_result[$i]['telephone'],
+                        $db_result[$i]['email'],
+                        $db_result[$i]['designation'],
                         $db_result[$i]['is_active'],
                         $db_result[$i]['is_deleted']
                     );
+                    // print_r($obj);
                     //Pushing objects to results array
                     array_push($results,$obj->make_json());
                 }
@@ -110,7 +122,7 @@
         }
     }
 
-    function VehicleReadById($requestObject, $params){
+    function EmployeeReadById($requestObject, $params){
         $response = [
             'http_code' => http_response_code(200),
             'data' => null
@@ -122,14 +134,18 @@
             //SQL query to select entity
             $query = "SELECT 
                     `id`,
-                    `make`,
-                    `model`,
-                    `manufactured_year`,
-                    `number_of_seats`,
-                    `registration_number`,
+                    `nic_number`,
+                    `first_name`,
+                    `last_name`,
+                    `address_line_1`,
+                    `address_line_2`,
+                    `city`,
+                    `telephone`,
+                    `email`,
+                    `designation`,
                     `is_active`,
                     `is_deleted` 
-                FROM vehicle 
+                FROM employee 
                 WHERE
                     `id`= :id AND
                     `is_deleted`= :is_deleted";
@@ -148,13 +164,17 @@
 
             if(count($db_result) > 0){
                 for ($i=0; $i < count($db_result) ; $i++) { 
-                    $obj = new Vehicle(
+                    $obj = new Employee(
                         $db_result[$i]['id'],
-                        $db_result[$i]['make'],
-                        $db_result[$i]['model'],
-                        $db_result[$i]['manufactured_year'],
-                        $db_result[$i]['number_of_seats'],
-                        $db_result[$i]['registration_number'],
+                        $db_result[$i]['nic_number'],
+                        $db_result[$i]['first_name'],
+                        $db_result[$i]['last_name'],
+                        $db_result[$i]['address_line_1'],
+                        $db_result[$i]['address_line_2'],
+                        $db_result[$i]['city'],
+                        $db_result[$i]['telephone'],
+                        $db_result[$i]['email'],
+                        $db_result[$i]['designation'],
                         $db_result[$i]['is_active'],
                         $db_result[$i]['is_deleted']
                     );
@@ -176,7 +196,7 @@
         }
     }
 
-    function VehicleUpdate($requestObject, $params){
+    function EmployeeUpdate($requestObject, $params){
         $response = [
             'http_code' => http_response_code(200),
             'data' => null
@@ -186,12 +206,16 @@
             $db = new Database();
 
             //SQL query to update entity
-            $query = "UPDATE vehicle SET
-                    `make`= :make,
-                    `model`= :model,
-                    `manufactured_year`= :manufactured_year,
-                    `number_of_seats`= :number_of_seats,
-                    `registration_number`= :registration_number,
+            $query = "UPDATE employee SET
+                    `nic_number`= :nic_number,
+                    `first_name`= :first_name,
+                    `last_name`= :last_name,
+                    `address_line_1`= :address_line_1,
+                    `address_line_2`= :address_line_2,
+                    `city`= :city,
+                    `telephone`= :telephone,
+                    `email`= :email,
+                    `designation`= :designation,
                     `is_active`=:is_active,
                     `is_deleted`=:is_deleted 
                 WHERE `id`= :id";
@@ -199,11 +223,15 @@
             // Query parameters
             $db_params = [
                 'id' => $params["id"],
-                'make' => $requestObject->data->make,
-                'model' => $requestObject->data->model,
-                'manufactured_year' => $requestObject->data->manufactured_year,
-                'number_of_seats' => $requestObject->data->number_of_seats,
-                'registration_number' => $requestObject->data->registration_number,
+                'nic_number' => $requestObject->data->nic_number,
+                'first_name' => $requestObject->data->first_name,
+                'last_name' => $requestObject->data->last_name,
+                'address_line_1' => $requestObject->data->address_line_1,
+                'address_line_2' => $requestObject->data->address_line_2,
+                'city' => $requestObject->data->city,
+                'telephone' => $requestObject->data->telephone,
+                'email' => $requestObject->data->email,
+                'designation' => $requestObject->data->designation,
                 'is_active' => $requestObject->data->is_active,
                 'is_deleted' => '0',
             ];
@@ -228,7 +256,7 @@
         }
     }
     
-    function VehicleDelete($requestObject, $params){
+    function EmployeeDelete($requestObject, $params){
         $response = [
             'http_code' => http_response_code(200),
             'data' => null
@@ -238,7 +266,7 @@
             $db = new Database();
 
             //SQL query to delete entity
-            $query = "UPDATE vehicle SET `is_deleted`= 1 WHERE `id`= :id";
+            $query = "UPDATE employee SET `is_deleted`= 1 WHERE `id`= :id";
 
             // Query parameters
             $db_params = [
