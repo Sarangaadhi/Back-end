@@ -2,7 +2,7 @@
     class RouteType{
 
         private int $id;
-        private int $route_type_name;
+        private string $route_type_name;
         private bool $is_active;
         private bool $is_deleted;
 
@@ -10,7 +10,7 @@
             $this->id = $id;
             $this->route_type_name = $route_type_name;
             $this->is_active = $is_active;
-            $this->is_deleted = $is_deleted;
+            $this->is_deleted = $is_deleted;            
         }
 
         //Return JSON value

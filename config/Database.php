@@ -1,20 +1,18 @@
 <?php
 
     class Database{
-
         //DB Params [local]
-        private $host = 'localhost';
         private $db_name = 'super3_backend';
         private $username = 'root';
         private $password = '';
-        private $conn;
 
         //DB Params [remote]
-        // private $host = 'localhost';
-        // private $db_name = 'super3_backend';
-        // private $username = 'root';
-        // private $password = '';
-        // private $conn;
+        // private $db_name = 'powerpos_super3';
+        // private $username = 'powerpos_super3backend';
+        // private $password = 'OQ1nNLu=^$Mx';
+
+        private $host = 'localhost';
+        private $conn;
 
         //DB Connect
         public function connect(){

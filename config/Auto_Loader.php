@@ -4,8 +4,15 @@
     include_once 'http/request.php';
     include_once 'http/response.php';
 
-    include_once 'endpoints/user.php';
+    include_once 'endpoints/conductor.php';
+    include_once 'endpoints/driver.php';
     include_once 'endpoints/employee.php';
+    include_once 'endpoints/route.php';
+    include_once 'endpoints/routeType.php';
+    include_once 'endpoints/trip.php';
+    include_once 'endpoints/tripExpenses.php';
+    include_once 'endpoints/user.php';
+    include_once 'endpoints/vehicle.php';
        
     include_once 'object_models/Conductor.php';
     include_once 'object_models/Driver.php';

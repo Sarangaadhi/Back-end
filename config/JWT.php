@@ -5,6 +5,6 @@
         static $jwt_audience="super3_frontend";
         static $jwt_algorithm="HS256";
         static $jwt_not_before=0;
-        static $jwt_expire_after= 60 * 60; //seconds
+        static $jwt_expire_after= 60 * 60 * 12; //seconds
     }
 ?>

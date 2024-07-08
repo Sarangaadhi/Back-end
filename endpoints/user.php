@@ -52,11 +52,12 @@
         $db = new Database();
 
         //SQL query to select users
-        $query = "SELECT `id`, `employee_id`, `username`, `password`, `is_manager`, `is_admin`, `is_active`, `is_deleted` FROM user WHERE `is_active`= :is_active AND `username`= :username";
+        $query = "SELECT `id`, `employee_id`, `username`, `password`, `is_manager`, `is_admin`, `is_active`, `is_deleted` FROM user WHERE `is_active`= :is_active AND `username`= :username AND `password`=:password";
 
         // Query parameters
         $params = [
             'username' => $requestObject->data->username,
+            'password' => $requestObject->data->password,
             'is_active' => '1',            
         ];
 
