@@ -13,6 +13,7 @@
     include_once 'endpoints/tripExpenses.php';
     include_once 'endpoints/user.php';
     include_once 'endpoints/vehicle.php';
+    include_once 'endpoints/dashboard.php';
        
     include_once 'object_models/Conductor.php';
     include_once 'object_models/Driver.php';
@@ -23,4 +24,5 @@
     include_once 'object_models/TripExpenses.php';
     include_once 'object_models/User.php';
     include_once 'object_models/Vehicle.php';
+    include_once 'object_models/Dashboard.php';
 ?>
