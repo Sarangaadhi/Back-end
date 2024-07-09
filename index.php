@@ -433,7 +433,18 @@
                     break;
             }
             break;  
-        default:
+        case 'dashboard':
+            switch ($ObjRequest['requestMethod']) {
+                case 'PATCH':
+                    handleRequest($ObjRequest['requestBody'],'DashboardLoad');
+                default:
+                    showResponseErr(400);
+                    break;
+            }
+            break;  
+
+
+            default:
             showResponseErr(503);
             break;
     }
